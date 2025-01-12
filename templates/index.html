@@ -4,56 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flask AI Assistant</title>
+    
+    <!-- Link to Bootstrap for responsive layout and default styling -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
+    <!-- Link to Font Awesome for icons (e.g., for buttons) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <!-- External JavaScript dependencies (Axios & jQuery) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
-	<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Link to custom CSS file located in the 'static' folder -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
-    <div class="container mt-4">
-        <h1 class="text-center">AI Assistant</h1>
+
+    
+
+    <div class="container mt-4 flex-grow-1">
+        <h1 class="text-center mb-5">Welcome to Flask AI Assistant</h1>
+
+        <!-- Button to Toggle visibility of all sections -->
+        <button id="toggleButton" class="btn btn-info mb-3">Show All Sections</button>
 
         <!-- Weather Section -->
-        <div class="card my-3">
+        <div class="card my-3" id="weatherSection" style="display:block;">
             <div class="card-header">Weather</div>
             <div class="card-body">
                 <input type="text" id="city" class="form-control mb-2" placeholder="Enter city name">
                 <button class="btn btn-primary" onclick="getWeather()">Get Weather</button>
+                <button class="btn btn-secondary" onclick="startSpeechToText('city')">🎤 Speak</button>
+                <button class="btn btn-secondary" onclick="speakText(document.getElementById('weatherResult').innerText)">🔊 Speak Weather</button>
                 <div id="weatherResult" class="mt-3"></div>
             </div>
         </div>
 
         <!-- Joke Section -->
-        <div class="card my-3">
+        <div class="card my-3" id="jokeSection" style="display:block;">
             <div class="card-header">Joke</div>
             <div class="card-body">
                 <button class="btn btn-success" onclick="getJoke()">Get a Joke</button>
+                <button class="btn btn-secondary" onclick="speakText(document.getElementById('jokeResult').innerText)">🔊 Speak Joke</button>
                 <div id="jokeResult" class="mt-3"></div>
             </div>
         </div>
 
         <!-- News Section -->
-        <div class="card my-3">
-            <div class="card-header">News</div>
+        <div class="card my-3" id="newsSection" style="display:block;">
+            <div class="card-header"> News</div>
             <div class="card-body">
-			    <input type="text" id="country" class="form-control mb-2" placeholder="Enter country...">
+                <input type="text" id="country" class="form-control mb-2" placeholder="Enter country...">
                 <button class="btn btn-warning" onclick="getNews()">Get Top News</button>
+                <button class="btn btn-secondary" onclick="startSpeechToText('country')">🎤 Speak</button>
+                <button class="btn btn-secondary" onclick="speakText(document.getElementById('newsResult').innerText)">🔊 Speak News</button>
                 <div id="newsResult" class="mt-3"></div>
             </div>
         </div>
 
-        <!-- Chatbot Section 
-        <div class="card my-3">
-            <div class="card-header">Chatbot</div>
-            <div class="card-body">
-                <textarea id="chatInput" class="form-control mb-2" placeholder="Ask the chatbot..."></textarea>
-                <button class="btn btn-info" onclick="askChatbot()">Send</button>
-                <div id="chatResult" class="mt-3"></div>
-            </div>
-        </div>
-    </div>
-	-->
-	<!-- Chatbot Section -->
-        <div class="card my-3">
+        <!-- Chatbot Section -->
+        <div class="card my-3" id="chatbotSection" style="display:block;">
             <div class="card-header">Chatbot</div>
             <div class="card-body">
                 <textarea id="chatInput" class="form-control mb-2" placeholder="Ask the chatbot..."></textarea>
@@ -63,101 +74,12 @@
                 <div id="chatResult" class="mt-3"></div>
             </div>
         </div>
+    </div>
 
-    <script>
-        // Fetch weather data
-        function getWeather() {
-            const city = document.getElementById('city').value;
-            axios.post(`/weather?city=${city}`)
-                .then(response => {
-                    document.getElementById('weatherResult').innerText = `Weather: City:${response.data.city}" ,"temperature:${response.data.temperature}","Description:${response.data.description}`;
-                })
-                .catch(error => {
-                    document.getElementById('weatherResult').innerText = `Error: ${error.response.data.message || error.message}`;
-                });
-        }
+    
 
-        // Fetch a random joke
-        function getJoke() {
-            axios.get('/joke')
-                .then(response => {
-                    document.getElementById('jokeResult').innerText = response.data.setup+","+response.data.punchline
-                })
-                .catch(error => {
-                    document.getElementById('jokeResult').innerText = `Error: ${error.response.data.message || error.message}`;
-                });
-        }
+    <!-- Link to custom JavaScript file located in the 'static' folder -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 
-        // Fetch news
-        function getNews() {
-		    const country = document.getElementById('country').value;
-			
-            axios.post('/news',{ message: country })
-                .then(response => {
-				    
-                    const articles = response.data.articles;
-					
-                    const newsList = articles.map(article => `<li>${article.title}</li>`).join('');
-                    document.getElementById('newsResult').innerHTML = `<ul>${newsList}</ul>`;
-                })
-                .catch(error => {
-				    
-                    document.getElementById('newsResult').innerText = `Error: ${error.response.data.message || error.message}`;
-                });
-        }
-
-        // Chatbot interaction
-        function askChatbot() {
-            const userInput = document.getElementById('chatInput').value;
-            axios.post('/chatbot', { message: userInput })
-                .then(response => {
-                    document.getElementById('chatResult').innerText = `Bot: ${response.data.reply}`;
-                })
-                .catch(error => {
-                    document.getElementById('chatResult').innerText = `Error: ${error.response.data.message || error.message}`;
-                });
-        }
-		
-		// Flask API URL for TTS and Speech-to-Text
-        const TTS_URL = "/tts";
-        const STT_URL = "/speech-to-text";
-
-        // Call the Flask TTS endpoint
-        function speakText(text) {
-            if (!text) {
-                alert("No text to speak!");
-                return;
-            }
-			
-            axios.post(TTS_URL, { text })
-                .then(() => {
-                    console.log("Text spoken successfully");
-                })
-                .catch(error => {
-                    console.error("Error in text-to-speech:", error.response.data || error.message);
-                });
-        }
-
-        // Call the Flask Speech-to-Text endpoint and set the result to an input field
-		
-		function startSpeechToText(targetInputId) {
-         axios.post(STT_URL)
-        .then(response => {
-            if (response.data.text) {
-                document.getElementById(targetInputId).value = response.data.text;
-            } else {
-                alert("No speech recognized. Please try again.");
-            }
-        })
-        .catch(error => {
-            console.error("Speech-to-text error:", error.response?.data?.error || error.message);
-            alert("Error in speech-to-text: " + (error.response?.data?.error || error.message));
-        });
-     }
-		
-		
-		
-    </script>
 </body>
 </html>
-
