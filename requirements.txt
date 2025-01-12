@@ -1,0 +1,81 @@
+1) install these lab pip install tf-keras flask flask-cors requests transformers pyttsx3 SpeechRecognition tesorflow
+2)enable developer mode
+3)make sure python 3.7 or higher is install.
+
+################################################################################
+
+4)Here’s where you can get the API keys for your project:
+
+---
+
+1. OpenWeatherMap API Key (Weather Data)
+
+1. Go to OpenWeatherMap.
+
+2. Create an account (or log in if you already have one).
+
+3. After logging in, go to the API Keys section in your account settings.
+
+4. Click on Create Key and name it.
+
+5. Copy the API key provided.
+
+
+
+---
+
+2. Joke API (No Key Required)
+
+For the joke API (https://official-joke-api.appspot.com/random_joke), no API key is required. You can directly make GET requests to fetch jokes.
+
+---
+
+3. NewsAPI (News Data)
+
+1. Visit NewsAPI.
+
+2. Sign up for a free account.
+
+3. After signing in, go to the Get API Key section in your account.
+
+4. Copy the API key provided.
+
+5. Note that the free plan may have usage limitations.
+
+
+
+---
+
+4. Hugging Face API Key (GPT-2 Model)
+
+If you’re using Hugging Face's hosted models:
+
+1. Go to Hugging Face.
+
+2. Create an account or log in.
+
+3. Navigate to your Profile > Settings > Access Tokens.
+
+4. Click on New Token, give it a name, select the appropriate scope, and create the token.
+
+5. Use this token to authenticate requests to Hugging Face models.
+
+
+For local GPT-2 usage (as in the example), you don’t need an API key; just install the transformers library.
+
+
+###########################################
+
+Run the Flask Application
+
+1. Open the terminal in your project directory.
+
+2. Run the Flask app:
+
+python app.py
+
+3. Open a browser and go to http://127.0.0.1:5000.
+
+######below dependencies need for microphone access#######
+python -m pip install pyaudio
+Collecting pyaudio Downloading PyAudio-0.2.14-cp311-cp311-win_amd64.whl
