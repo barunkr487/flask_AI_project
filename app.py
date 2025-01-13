@@ -36,7 +36,7 @@ def get_weather():
 
     weather_url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={WEATHER_API_KEY}"
   
-    response = requests.get(weather_url)
+    response = requests.get(weather_url,verify=False)
     if response.status_code == 200:
         data = response.json()
         print(data)
@@ -52,7 +52,7 @@ def get_weather():
 
 @app.route("/joke", methods=["GET"])
 def get_joke():
-    response = requests.get(JOKE_API_URL)
+    response = requests.get(JOKE_API_URL,verify=False)
     print(response)
     if response.status_code == 200:
         data = response.json()
@@ -69,7 +69,7 @@ def get_news():
     print(country)
     news_url = f"https://newsapi.org/v2/top-headlines?country={country}&apiKey={NEWS_API_KEY}"
     
-    response = requests.get(news_url)
+    response = requests.get(news_url,verify=False)
     print(response)
     if response.status_code == 200:
         articles = response.json().get("articles", [])
